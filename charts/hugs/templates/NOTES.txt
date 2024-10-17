@@ -4,47 +4,66 @@
 
 1. Get the application URL by running these commands:
 
-{{ if .Values.ingress.enabled }}
-  export INGRESS_NAME=$(kubectl get ingress --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "hugs.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+{{- if .Values.ingress.enabled }}
+export INGRESS_NAME=$(kubectl get ingress --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "hugs.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+export INGRESS_HOST=$(kubectl get ingress $INGRESS_NAME --namespace {{ .Release.Namespace }} -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+export INGRESS_IP=$(kubectl get ingress $INGRESS_NAME --namespace {{ .Release.Namespace }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+if [ -z "$INGRESS_HOST" ] && [ -z "$INGRESS_IP" ]; then
+  echo "Waiting for Ingress hostname or IP... (This may take a few minutes)"
+  kubectl wait --namespace {{ .Release.Namespace }} \
+    --for=condition=LoadBalancer \
+    --timeout=5m \
+    ingress/$INGRESS_NAME
+  export INGRESS_HOST=$(kubectl get ingress $INGRESS_NAME --namespace {{ .Release.Namespace }} -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
   export INGRESS_IP=$(kubectl get ingress $INGRESS_NAME --namespace {{ .Release.Namespace }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-  if [ -z "$INGRESS_IP" ]; then
-    echo "Waiting for Ingress IP... (This may take a few minutes)"
-    kubectl wait --namespace {{ .Release.Namespace }} \
-      --for=condition=LoadBalancer \
-      --timeout=5m \
-      ingress/$INGRESS_NAME
-    export INGRESS_IP=$(kubectl get ingress $INGRESS_NAME --namespace {{ .Release.Namespace }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-  fi
-  if [ -z "$INGRESS_IP" ]; then
-    echo "Unable to get Ingress IP. Please check your ingress configuration."
-  else
-    echo "Visit http://$INGRESS_IP to access your application"
-  fi
+fi
+if [ -n "$INGRESS_HOST" ]; then
+  echo "Visit http://$INGRESS_HOST to access your application"
+elif [ -n "$INGRESS_IP" ]; then
+  echo "Visit http://$INGRESS_IP to access your application"
+else
+  echo "Unable to get Ingress hostname or IP. Please check your ingress configuration."
+fi
 {{- else if contains "NodePort" .Values.service.type }}
-  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "hugs.fullname" . }})
-  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-  echo http://$NODE_IP:$NODE_PORT
+export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "hugs.fullname" . }})
+export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+echo "Visit http://$NODE_IP:$NODE_PORT to access your application"
+echo "Note: If you're running on a cloud provider, you may need to use the external IP of the node instead."
 {{- else if contains "LoadBalancer" .Values.service.type }}
-     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch its status by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "hugs.fullname" . }}'
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "hugs.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
-  echo http://$SERVICE_IP:{{ .Values.service.port }}
+echo "Waiting for LoadBalancer IP to be available. This may take a few minutes..."
+kubectl wait --namespace {{ .Release.Namespace }} \
+  --for=condition=LoadBalancer \
+  --timeout=5m \
+  svc/{{ include "hugs.fullname" . }}
+export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "hugs.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+if [ -n "$SERVICE_IP" ]; then
+  echo "Visit http://$SERVICE_IP:{{ .Values.service.port }} to access your application"
+else
+  echo "Unable to get LoadBalancer IP. Please check your service configuration."
+fi
 {{- else if contains "ClusterIP" .Values.service.type }}
-  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "hugs.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
-  export CONTAINER_PORT=$(kubectl get pod --namespace {{ .Release.Namespace }} $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
-  echo "Visit http://127.0.0.1:8080 to use your application"
-  kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8080:$CONTAINER_PORT
+echo "ClusterIP service type detected. This service is not directly accessible from outside the cluster."
+echo "To access the application, you can use port-forwarding:"
+export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "hugs.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+export CONTAINER_PORT=$(kubectl get pod --namespace {{ .Release.Namespace }} $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+echo "Run the following command in a separate terminal:"
+echo "kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8080:$CONTAINER_PORT"
+echo "Then visit http://127.0.0.1:8080 to access your application"
 {{- end }}
 
-2. Send requests to the deployed TGI instance following OpenAI specification:
+2. For internal cluster access (regardless of service type):
+    export SERVICE_NAME={{ include "hugs.fullname" . }}
+    export SERVICE_PORT={{ .Values.service.port }}
+    echo "From inside the cluster, you can access the service at: $SERVICE_NAME.{{ .Release.Namespace }}.svc.cluster.local:$SERVICE_PORT"
+
+3. Send requests to the deployed TGI instance following OpenAI specification:
 
    To interact with the /v1/chat/completions endpoint, use the following curl command:
 
-   MODEL_ID=$(kubectl get deployment {{ include "hugs.fullname" . }} -n {{ .Release.Namespace }} -o jsonpath='{.spec.template.spec.containers[0].env[?(@.name=="MODEL_ID")].value}')
    curl http://127.0.0.1:8080/v1/chat/completions \
      -H "Content-Type: application/json" \
      -d '{
-       "model": "'$MODEL_ID'",
+       "model": "tgi",
        "messages": [{"role": "user", "content": "What's Deep Learning?"}],
        "temperature": 0.7
      }'
@@ -52,7 +71,7 @@
    This will send a POST request to the endpoint with a sample message. The port used will be 8080 by default, but can be overridden by setting the PORT environment variable.
 
    Adjust the following parameters as needed:
-   - model: The name of the model you're using (retrieved from the MODEL_ID environment variable)
+   - model: The name of the model you're using; set to "tgi" by default
    - messages: An array of message objects, each with a role and content
    - temperature: Controls randomness in the output (0.0 to 1.0, lower is more deterministic)
 
@@ -64,7 +83,7 @@
 
    For more details on the generation parameters accepted by TGI, check the Messages API documentation <https://huggingface.co/docs/text-generation-inference/main/en/messages_api>.
 
-3. (Optional) Scale to more replicas:
+4. (Optional) Scale to more replicas:
 
    To scale the deployment to more replicas, use the following command:
 
@@ -72,7 +91,7 @@
 
    Replace <desired_number> with the number of replicas you want.
 
-4. Delete / Uninstall:
+5. Delete / Uninstall:
 
    To delete the release and uninstall all associated resources, run:
 
