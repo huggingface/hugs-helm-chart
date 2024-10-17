@@ -1,0 +1,25 @@
+{{ template "chart.header" . }}
+
+{{ template "chart.description" . }}
+
+{{ template "chart.versionBadge" . }}
+{{ template "chart.typeBadge" . }}
+{{ template "chart.appVersionBadge" . }}
+
+{{ template "chart.maintainersSection" . }}
+
+## Installing the Chart
+
+To install the chart with the release name `hugs`:
+
+```console
+$ helm repo add hugs https://huggingface.github.io/hugs-helm-chart
+$ helm repo update
+$ helm install hugs hugs/{{ template "chart.name" . }}
+```
+
+{{ template "chart.requirementsSection" . }}
+
+{{ template "chart.valuesSection" . }}
+
+{{ template "helm-docs.versionFooter" . }}
