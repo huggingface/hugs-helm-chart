@@ -1,0 +1,48 @@
+# Specifies the API version and kind of the configuration
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+# Defines the basic cluster metadata
+metadata:
+  name: $CLUSTER_NAME # Cluster name, used in various AWS resource names
+  region: $REGION # AWS region where the cluster will be created
+  version: "1.30" # Kubernetes version to use for the cluster
+
+# IAM configuration for the cluster
+iam:
+  withOIDC: true # Enables IAM roles for service accounts (IRSA) using OIDC
+  serviceAccounts:
+    # Configures a service account for marketplace metering
+    - metadata:
+        name: $SERVICE_ACCOUNT_NAME
+        namespace: $NAMESPACE
+      attachPolicyARNs:
+        - arn:aws:iam::aws:policy/AWSMarketplaceMeteringRegisterUsage
+    # Configures a service account for the AWS Load Balancer Controller (just required
+    # if ingress is enabled within the HUGS Helm Template)
+    - metadata:
+        name: aws-load-balancer-controller
+        namespace: $NAMESPACE
+      attachPolicyARNs:
+        - arn:aws:iam::$AWS_ACCOUNT_ID:policy/AWSLoadBalancerControllerIAMPolicy
+      roleName: AmazonEKSLoadBalancerControllerRole
+
+# Defines the managed node group for the cluster
+managedNodeGroups:
+  - name: $NODE_GROUP_NAME
+    instanceType: g5.xlarge # GPU-enabled instance type, required by HUGS
+    minSize: 1
+    maxSize: 1 # Set to a greater number if you want to enable auto-scaling
+    desiredCapacity: 1 # Fixed size node group, can be adjusted for scaling
+
+# Specifies the EKS add-ons to be installed (default ones)
+# All the addons below will be installed within the `kube-system` namespace
+addons:
+  - name: vpc-cni # Amazon VPC CNI plugin for Kubernetes
+  - name: coredns # CoreDNS for Kubernetes DNS services
+  - name: kube-proxy # kube-proxy for Kubernetes network proxy
+
+# Configures CloudWatch logging for the cluster
+cloudWatch:
+  clusterLogging:
+    enableTypes: ["*"] # Enables all types of control plane logging
