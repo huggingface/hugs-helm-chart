@@ -1,4 +1,4 @@
-# Helm chart for Hugging Face Generative AI Services (HUGS)
+# Helm Chart for Hugging Face Generative AI Services (HUGS)
 
 ![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
@@ -6,10 +6,20 @@
 
 ## Installing the Chart
 
-To install the chart with the release name `hugs`:
+To add the chart from the current repository you need to run:
 
 ```console
-$ helm repo add hugs https://github.com/huggingface/hugs-helm-chart/releases/download/0.0.1/hugs-0.0.1.tgz
-$ helm repo update
-$ helm install hugs hugs/hugs
+$ helm repo add hugs https://raw.githubusercontent.com/huggingface/hugs-chart/main/charts/hugs
+$ helm repo update hugs
 ```
+
+## Installing the Chart
+
+Then to install the chart on e.g. AWS EKS you can run the following:
+
+```console
+$ helm install hugs-demo hugs/hugs -f aws/eks-values.yaml --set image.registry="XXXXXXXXXXXX.dkr.ecr.us-east-1.amazonaws.com"
+```
+
+> [!NOTE]
+> Find more information about HUGS on AWS [here](./aws/).
