@@ -14,7 +14,7 @@ With HUGS, developers can easily find, subscribe to, and deploy Hugging Face mod
 
    ![HUGS on AWS Marketplace](https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/hugs/aws/hugs-marketplace-listing.png)
 
-3. Subscribe to the product in AWS Marketplace by following the instructions on the page. At the time of writing (September 2024), the steps are to:
+2. Subscribe to the product in AWS Marketplace by following the instructions on the page. At the time of writing (September 2024), the steps are to:
 
    1. Click `Continue to Subscribe`, then go to the next page.
    2. Click `Continue to Configuration`, then go to the next page.
@@ -22,7 +22,7 @@ With HUGS, developers can easily find, subscribe to, and deploy Hugging Face mod
 
    ![HUGS Configuration on AWS Marketplace](https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/hugs/aws/hugs-configuration.png)
 
-4. Then click `Continue to Launch`. You successfully subscribe to HUGS. You can now follow the steps below to deploy your preferred HUGS container and model using AWS EKS.
+3. Then click `Continue to Launch`. You successfully subscribe to HUGS. You can now follow the steps below to deploy your preferred HUGS container and model using AWS EKS.
 
 > [!NOTE]
 > To know whether you are subscribed or not, you can either see if a blue modal appears on top of the product page with a text saying "You have access to this product", meaning that either you or someone else from your organization has already requested access for your account; otherwise, you can go to the AWS Marketplace service in the AWS Console and search for "HUGS (HUgging Face Generative AI Services)" is listed among your subscribed products.
@@ -153,7 +153,7 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 Finally, you can install the Helm template to deploy the HUGS container with the selected model, e.g. `meta-llama/Llama-3.1-8B-Instruct`; and you need to set the container URI provided by the AWS Marketplace for your account, either via the `--set` option when running `helm install` (as shown below), or modifying its value within the `eks-values.yaml` file provided.
 
 ```bash
-helm repo add hugs https://raw.githubusercontent.com/huggingface/hugs-chart/main/charts/hugs
+helm repo add hugs https://raw.githubusercontent.com/huggingface/hugs-helm-chart/main/charts/hugs
 helm repo update hugs
 helm install $DEPLOYMENT_NAME hugs/hugs -f eks-values.yaml --set image.registry="XXXXXXXXXXXX.dkr.ecr.us-east-1.amazonaws.com" --set serviceAccountName=$SERVICE_ACCOUNT_NAME --set nodeSelector."eks\.amazonaws\.com/nodegroup"=$NODE_GROUP_NAME
 ```
