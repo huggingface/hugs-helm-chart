@@ -10,6 +10,6 @@ entries:
       name: hugs
       type: application
       urls:
-        - https://github.com/huggingface/hugs-chart/releases/download/0.0.1/hugs-0.0.1.tgz
+        - https://github.com/huggingface/hugs-helm-chart/releases/download/0.0.1/hugs-0.0.1.tgz
       version: 0.0.1
 generated: "2024-10-17T15:16:33.79352+02:00"
