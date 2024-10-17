@@ -1,0 +1,7 @@
+name: hugs
+description: Helm chart for Hugging Face Generative AI Services (HUGS)
+icon: https://huggingface.co/front/assets/huggingface_logo-noborder.svg
+type: application
+version: 0.0.1
+apiVersion: v2
+appVersion: "1.16.0"
