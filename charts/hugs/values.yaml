@@ -1,0 +1,76 @@
+image:
+  registry: # Add the HUGS Registry that you subscribed to
+  repository: # Add the HUGS Repository where the container is hosted in
+  model: # Add the name of the HUGS container which matches the model to be served
+  pullPolicy: Always
+  tag: latest
+
+# serviceAccountName: hugs-service-account
+
+podSecurityContext:
+  {}
+  # fsGroup: 2000
+
+securityContext:
+  {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+# Via `env` you can specify the port, defaults to 80.
+# Note that if you update the exposed port, you should also
+# update the service, readiness, and liveness ports too.
+# env:
+#   PORT: "80"
+
+service:
+  type: NodePort
+  port: 80
+
+# Optionally, one may want to start an ingress service too, with
+# a custom IP to avoid having to forward the port to localhost
+ingress:
+  enabled: false
+  # className: alb
+  # annotations:
+  #   alb.ingress.kubernetes.io/scheme: internet-facing
+  # hosts:
+  #   - host: ""
+  #     paths:
+  #       - path: /
+  #         pathType: Prefix
+  #         backend:
+  #           service:
+  #             name: hugs-service
+  #             port:
+  #               name: http
+
+resources:
+  requests:
+    nvidia.com/gpu: 1
+  limits:
+    nvidia.com/gpu: 1
+
+volumes:
+  - name: dshm
+    emptyDir:
+      medium: Memory
+      sizeLimit: 1Gi
+
+volumeMounts:
+  - mountPath: /dev/shm
+    name: dshm
+
+nodeSelector:
+  {}
+  # eks.amazonaws.com/nodegroup: hugs-node-group
+
+autoscaling:
+  enabled: false
+  # minReplicas: 1
+  # maxReplicas: 2
+  # targetMemoryUtilizationPercentage: ""
+  # targetCPUUtilizationPercentage: ""
