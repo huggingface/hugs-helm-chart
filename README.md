@@ -20,7 +20,11 @@ $ helm repo update hugs
 Then to install the chart on e.g. AWS EKS you can run the following:
 
 ```console
-$ helm install hugs-demo hugs/hugs -f aws/eks-values.yaml --set image.registry="XXXXXXXXXXXX.dkr.ecr.us-east-1.amazonaws.com"
+$ helm install hugs-demo hugs/hugs \
+    -f aws/eks-values.yaml \
+    --set image.registry="XXXXXXXXXXXX.dkr.ecr.us-east-1.amazonaws.com" \
+    --set image.repository="hugging-face" \
+    --set image.model="nvidia-meta-llama-meta-llama-3.1-8b-instruct"
 ```
 
 > [!NOTE]
