@@ -16,7 +16,7 @@ spec:
         - '-f'
         - '-s'
         - '-S'
-        - 'http://{{ include "hugs.fullname" . }}:{{ .Values.service.port }}/health'
+        - 'http://{{ include "hugs.fullname" . }}-service:{{ .Values.service.port }}/health'
   restartPolicy: Never
   {{- if .Values.serviceAccountName }}
   serviceAccountName: {{ .Values.serviceAccountName }}
