@@ -11,7 +11,7 @@
 To add the chart from the current repository you need to run:
 
 ```console
-$ helm repo add hugs https://raw.githubusercontent.com/huggingface/hugs-chart/main/charts/hugs
+$ helm repo add hugs https://raw.githubusercontent.com/huggingface/hugs-helm-chart/main/charts/hugs
 $ helm repo update hugs
 ```
 
