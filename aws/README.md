@@ -12,7 +12,7 @@ With HUGS, developers can easily find, subscribe to, and deploy Hugging Face mod
 
 1. Go to [HUGS AWS Marketplace listing](https://aws.amazon.com/marketplace/pp/prodview-bqy5zfvz3wox6)
 
-   ![HUGS on AWS Marketplace](https://huggingface.co/datasets/huggingface/documentation-images/blob/main/hugs/aws/hugs-listing.png)
+   ![HUGS on AWS Marketplace](https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/hugs/aws/hugs-listing.png)
 
 2. Subscribe to the product in AWS Marketplace by following the instructions on the page. At the time of writing (September 2024), the steps are to:
 
@@ -20,7 +20,7 @@ With HUGS, developers can easily find, subscribe to, and deploy Hugging Face mod
    2. Click `Continue to Configuration`, then go to the next page.
    3. Select the fulfillment option & software version (HUGS Version and model you want to use) from the list.
 
-   ![HUGS Configuration on AWS Marketplace](https://huggingface.co/datasets/huggingface/documentation-images/blob/main/hugs/aws/hugs-configuration.png)
+   ![HUGS Configuration on AWS Marketplace](https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/hugs/aws/hugs-configuration.png)
 
 3. Then click `Continue to Launch`. You successfully subscribe to HUGS. You can now follow the steps below to deploy your preferred HUGS container and model using AWS EKS.
 
