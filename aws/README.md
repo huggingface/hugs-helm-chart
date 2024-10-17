@@ -12,9 +12,9 @@ With HUGS, developers can easily find, subscribe to, and deploy Hugging Face mod
 
 1. Go to [HUGS AWS Marketplace listing](https://aws.amazon.com/marketplace/pp/prodview-bqy5zfvz3wox6)
 
-   ![HUGS on AWS Marketplace](https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/hugs/aws/hugs-listing.png)
+   ![HUGS on AWS Marketplace](https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/hugs/aws/hugs-marketplace-listing.png)
 
-2. Subscribe to the product in AWS Marketplace by following the instructions on the page. At the time of writing (September 2024), the steps are to:
+3. Subscribe to the product in AWS Marketplace by following the instructions on the page. At the time of writing (September 2024), the steps are to:
 
    1. Click `Continue to Subscribe`, then go to the next page.
    2. Click `Continue to Configuration`, then go to the next page.
@@ -22,7 +22,7 @@ With HUGS, developers can easily find, subscribe to, and deploy Hugging Face mod
 
    ![HUGS Configuration on AWS Marketplace](https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/hugs/aws/hugs-configuration.png)
 
-3. Then click `Continue to Launch`. You successfully subscribe to HUGS. You can now follow the steps below to deploy your preferred HUGS container and model using AWS EKS.
+4. Then click `Continue to Launch`. You successfully subscribe to HUGS. You can now follow the steps below to deploy your preferred HUGS container and model using AWS EKS.
 
 > [!NOTE]
 > To know whether you are subscribed or not, you can either see if a blue modal appears on top of the product page with a text saying "You have access to this product", meaning that either you or someone else from your organization has already requested access for your account; otherwise, you can go to the AWS Marketplace service in the AWS Console and search for "HUGS (HUgging Face Generative AI Services)" is listed among your subscribed products.
