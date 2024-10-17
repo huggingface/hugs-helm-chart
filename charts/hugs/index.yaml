@@ -1,0 +1,15 @@
+apiVersion: v1
+entries:
+  hugs:
+    - apiVersion: v2
+      appVersion: 1.16.0
+      created: "2024-10-17T15:16:33.793877+02:00"
+      description: Helm chart for Hugging Face Generative AI Services (HUGS)
+      digest: 06fdb568f22718483b84b360ad6c23443c2dc55631319ad26dc16498da598a81
+      icon: https://huggingface.co/front/assets/huggingface_logo-noborder.svg
+      name: hugs
+      type: application
+      urls:
+        - https://github.com/huggingface/hugs-helm-chart/releases/download/0.0.1-helm/hugs-0.0.1.tgz
+      version: 0.0.1
+generated: "2024-10-17T15:16:33.79352+02:00"
