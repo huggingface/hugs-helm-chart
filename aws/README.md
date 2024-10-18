@@ -148,6 +148,16 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
     --set serviceAccount.name=aws-load-balancer-controller
 ```
 
+> [!NOTE]
+> If you decide to deploy the AWS LoadBalancer Controller and enable the ingress within the HUGS deployment, then you will need to wait until the ALB controller is running before deploying HUGS, to do so you can use the following `kubectl` command:
+>
+> ```bash
+> kubectl wait --namespace $NAMESPACE \
+>     --for=condition=ready pod \
+>     --selector=app.kubernetes.io/name=aws-load-balancer-controller \
+>     --timeout=90s
+> ```
+
 ### Deploy HUGS with Helm on AWS EKS
 
 Finally, you can install the Helm template to deploy the HUGS container with the selected model, e.g. `meta-llama/Llama-3.1-8B-Instruct`; and you need to set the container URI provided by the AWS Marketplace for your account, either via the `--set` option when running `helm install` (as shown below), or modifying its value within the `eks-values.yaml` file provided.
