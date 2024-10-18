@@ -94,7 +94,7 @@ managedNodeGroups:
   - name: $NODE_GROUP_NAME
     instanceType: g5.xlarge # GPU-enabled instance type, required by HUGS
     minSize: 1
-    maxSize: 1 # Set to a greater number if you want to enable auto-scaling
+    maxSize: 2 # Set to a greater number if you want to enable auto-scaling
     desiredCapacity: 1 # Fixed size node group, can be adjusted for scaling
 
 # Specifies the EKS add-ons to be installed (default ones)
