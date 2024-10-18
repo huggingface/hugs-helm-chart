@@ -176,3 +176,83 @@ helm install $DEPLOYMENT_NAME hugs/hugs \
 
 > [!NOTE]
 > The command above assumes that you followed the steps within this example, if you changed the node group name, the service account name, the container, or the number of accelerators; you should manually modify or create a new `values.yaml` file out of [`eks-values.yaml`](eks-values.yaml) with your custom settings.
+
+### Inference on HUGS
+
+To run the inference over the deployed HUGS service, you can either:
+
+- Forward the port via port-forwarding to a local port as e.g. 8080 (so that you can send requests to the service via `localhost`) with the command:
+
+  ```bash
+  kubectl port-forward service/$DEPLOYMENT_NAME 8080:80
+  ```
+
+- Use the external IP or hostname of the ingress, if `ingress.enabled: true`, that can be retrieved with the following command:
+
+  ```bash
+  kubectl get ingress $DEPLOYMENT_NAME -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+  ```
+
+Then you can send requests to the Messages API via either `localhost`, the ingress IP or the ingress hostname, from outside the running pod.
+
+The Messages API is an OpenAI-compatible endpoint under `/v1/chat/completions` following the [OpenAI OpenAPI Specification](https://github.com/openai/openai-openapi). Being OpenAI-compatible implies that the inference can be run not only with `cURL` but also with both the `huggingface_hub.InferenceClient` and the `openai.OpenAI` SDK in Python, as well as any other OpenAI-compatible SDK in any programming language.
+
+> [!NOTE]
+> In the inference examples show below, the host is assumed to be `localhost` which is the case when deploying HUGS via Kubernetes with port-forwarding. If you have deployed HUGS on Kubernetes using an ingress under a specific IP, host, and/or with SSL (HTTPS), note that you should update the `localhost` references below with your host or IP.
+
+#### cURL
+
+Using `cURL` is pretty straight forward to [install](https://curl.se/docs/install.html) and use.
+
+```bash
+curl http://localhost:8080/v1/chat/completions \
+    -X POST \
+    -d '{"messages":[{"role":"user","content":"What is Deep Learning?"}],"temperature":0.7,"top_p":0.95,"max_tokens":128}}' \
+    -H 'Content-Type: application/json'
+```
+
+#### Python
+
+As already mentioned, you can either use the `huggingface_hub.InferenceClient` from the `huggingface_hub` Python SDK (recommended), the `openai` Python SDK, or any SDK with an OpenAI-compatible interface that can consume the Messages API.
+
+##### `huggingface_hub`
+
+You can install it via pip as `pip install --upgrade --quiet huggingface_hub`, and then run the following snippet to mimic the `cURL` commands above i.e. sending requests to the Messages API:
+
+```python
+from huggingface_hub import InferenceClient
+
+client = InferenceClient(base_url="http://localhost:8080", api_key="-")
+
+chat_completion = client.chat.completions.create(
+    messages=[
+        {"role":"user","content":"What is Deep Learning?"},
+    ],
+    temperature=0.7,
+    top_p=0.95,
+    max_tokens=128,
+)
+```
+
+Read more about the [`huggingface_hub.InferenceClient.chat_completion` method](https://huggingface.co/docs/huggingface_hub/en/package_reference/inference_client#huggingface_hub.AsyncInferenceClient.chat_completion).
+
+##### `openai`
+
+Alternatively, you can also use the Messages API via `openai`; you can install it via `pip as pip install --upgrade openai`, and then run:
+
+```python
+from openai import OpenAI
+
+client = OpenAI(base_url="http://localhost:8080/v1/", api_key="-")
+
+chat_completion = client.chat.completions.create(
+    model="tgi",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "What is Deep Learning?"},
+    ],
+    temperature=0.7,
+    top_p=0.95,
+    max_tokens=128,
+)
+```
