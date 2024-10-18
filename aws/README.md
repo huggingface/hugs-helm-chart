@@ -133,7 +133,7 @@ envsubst < eks-cluster.yaml > eks-cluster.yaml
 Once the `eks-cluster.yaml` file has been updated, then you can just run the following command:
 
 ```bash
-eksctl create cluster --config eks-cluster.yaml
+eksctl create cluster --config-file eks-cluster.yaml
 ```
 
 If you want to enable or use the AWS LoadBalancer, you will need to deploy that separately before deploying HUGS, in order to enable the ingress.
