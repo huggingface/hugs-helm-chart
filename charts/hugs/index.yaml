@@ -3,13 +3,24 @@ entries:
   hugs:
     - apiVersion: v2
       appVersion: 1.16.0
-      created: "2024-10-17T15:16:33.793877+02:00"
+      created: "2024-10-18T14:59:12.947806+02:00"
+      description: Helm Chart for Hugging Face Generative AI Services (HUGS)
+      digest: 0c61117d75132e8734ca6e3f7938ff3cd17276d244c02626f61c48b11da71b5e
+      icon: https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/hugs/hugs-purple-no-bg.png
+      name: hugs
+      type: application
+      urls:
+        - https://github.com/huggingface/hugs-helm-chart/releases/download/0.0.2/hugs-0.0.2.tgz
+      version: 0.0.2
+    - apiVersion: v2
+      appVersion: 1.16.0
+      created: "2024-10-18T14:59:12.946878+02:00"
       description: Helm chart for Hugging Face Generative AI Services (HUGS)
-      digest: 06fdb568f22718483b84b360ad6c23443c2dc55631319ad26dc16498da598a81
+      digest: 31d3f14e70547a246e61803faeea9d30888eabee796d7cfe2b7f1f881075ceea
       icon: https://huggingface.co/front/assets/huggingface_logo-noborder.svg
       name: hugs
       type: application
       urls:
         - https://github.com/huggingface/hugs-helm-chart/releases/download/0.0.1/hugs-0.0.1.tgz
       version: 0.0.1
-generated: "2024-10-17T15:16:33.79352+02:00"
+generated: "2024-10-18T14:59:12.946052+02:00"
