@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "hugs.fullname" . }}-deployment
+  name: {{ include "hugs.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "hugs.labels" . | nindent 4 }}
