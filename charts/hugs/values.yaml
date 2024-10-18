@@ -20,10 +20,10 @@ securityContext:
   # runAsNonRoot: true
   # runAsUser: 1000
 
+env: {}
 # Via `env` you can specify the port, defaults to 80.
 # Note that if you update the exposed port, you should also
 # update the service, readiness, and liveness ports too.
-# env:
 #   PORT: "80"
 
 service:
@@ -42,11 +42,6 @@ ingress:
   #     paths:
   #       - path: /
   #         pathType: Prefix
-  #         backend:
-  #           service:
-  #             name: hugs-service
-  #             port:
-  #               name: http
 
 resources:
   requests:
