@@ -1,3 +1,5 @@
+# numReplicas: 1
+
 image:
   registry: # Add your custom HUGS Registry here as XXXXXXXXXXXX.dkr.ecr.us-east-1.amazonaws.com
   repository: hugging-face
@@ -27,6 +29,26 @@ securityContext:
 #   PORT: "80"
 env:
   AWS_MARKETPLACE_PRODUCT_CODE: 4qd427bqyuzyhn5st1v7x40oq
+
+livenessProbe:
+  enabled: true
+  # You may want to increase the initialDelaySeconds for the bigger LLMs as Llama 3.1 405B
+  # since the download will take longer and the default delay may not be enough for the
+  # download to be completed
+  # initialDelaySeconds: 360
+  # periodSeconds: 15
+  # timeoutSeconds: 5
+  # failureThreshold: 3
+
+readinessProbe:
+  enabled: true
+  # You may want to increase the initialDelaySeconds for the bigger LLMs as Llama 3.1 405B
+  # since the download will take longer and the default delay may not be enough for the
+  # download to be completed
+  # initialDelaySeconds: 360
+  # periodSeconds: 30
+  # timeoutSeconds: 5
+  # failureThreshold: 3
 
 service:
   type: NodePort

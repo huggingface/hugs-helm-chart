@@ -1,3 +1,5 @@
+# numReplicas: 1
+
 image:
   registry: # Add the HUGS Registry that you subscribed to
   repository: # Add the HUGS Repository where the container is hosted in
