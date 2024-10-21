@@ -27,8 +27,6 @@ securityContext:
 # update the service, readiness, and liveness ports too.
 # env:
 #   PORT: "80"
-env:
-  AWS_MARKETPLACE_PRODUCT_CODE: 4qd427bqyuzyhn5st1v7x40oq
 
 livenessProbe:
   enabled: true
