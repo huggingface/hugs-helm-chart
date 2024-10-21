@@ -62,7 +62,7 @@ Create the name of the service account to use
 {{- end }}
 
 {{/*
-Build the image URI from registry, repository, model, and tag
+Build the image URI from registry, repository, name, and tag
 */}}
 {{- define "hugs.image_uri" -}}
 {{- printf "%s/%s/%s:%s" .Values.image.registry .Values.image.repository .Values.image.name .Values.image.tag | trimSuffix "/" }}
