@@ -1,7 +1,7 @@
 image:
   registry: # Add the HUGS Registry that you subscribed to
   repository: # Add the HUGS Repository where the container is hosted in
-  model: # Add the name of the HUGS container which matches the model to be served
+  name: # Add the name of the HUGS container image
   pullPolicy: Always
   tag: latest
 

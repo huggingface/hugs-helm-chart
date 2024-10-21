@@ -1,7 +1,7 @@
 image:
   registry: # Add your custom HUGS Registry here as XXXXXXXXXXXX.dkr.ecr.us-east-1.amazonaws.com
   repository: hugging-face
-  model: nvidia-meta-llama-meta-llama-3.1-8b-instruct
+  name: nvidia-meta-llama-meta-llama-3.1-8b-instruct
   pullPolicy: Always
   tag: latest
 
