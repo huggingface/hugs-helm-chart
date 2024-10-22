@@ -22,5 +22,10 @@ spec:
       command:
         - /bin/sh
         - -c
-        - curl -v -f --max-time 10 http://{{ include "hugs.fullname" . }}:{{ .Values.service.port }}/health
+        - >
+          curl -v -f --max-time 10
+          --retry 10
+          --retry-delay 30
+          --retry-all-errors
+          http://{{ include "hugs.fullname" . }}:{{ .Values.service.port }}/health
   restartPolicy: Never

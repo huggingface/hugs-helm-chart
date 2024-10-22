@@ -22,9 +22,12 @@ spec:
       command:
         - /bin/sh
         - -c
-        - |
-          curl -v -f \
-            -H "Content-Type: application/json" \
-            -d '{"messages":[{"role":"user","content":"What'"'"'s Deep Learning?"}],"max_tokens":10,"stream":false}' \
-            http://{{ include "hugs.fullname" . }}:{{ .Values.service.port }}/v1/chat/completions
+        - >
+          curl -v -f --max-time 10
+          --retry 10
+          --retry-delay 30
+          --retry-all-errors
+          -H "Content-Type: application/json"
+          -d '{"messages":[{"role":"user","content":"What is Deep Learning?"}],"max_tokens":10,"stream":false}'
+          http://{{ include "hugs.fullname" . }}:{{ .Values.service.port }}/v1/chat/completions
   restartPolicy: Never

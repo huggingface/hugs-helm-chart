@@ -45,22 +45,26 @@ spec:
             - name: http
               containerPort: {{ $.Values.env.PORT | default 80 | int }}
               protocol: TCP
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: {{ $.Values.env.PORT | default 80 | int }}
-            initialDelaySeconds: 360
-            periodSeconds: 15
-            timeoutSeconds: 5
-            failureThreshold: 3
+          {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /health
               port: {{ $.Values.env.PORT | default 80 | int }}
-            initialDelaySeconds: 360
-            periodSeconds: 30
-            timeoutSeconds: 5
-            failureThreshold: 3
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds | default 360 }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds | default 30 }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds | default 5 }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold | default 3 }}
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ $.Values.env.PORT | default 80 | int }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds | default 360 }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds | default 15 }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds | default 5 }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold | default 3 }}
+          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- if .Values.env }}
