@@ -5,7 +5,7 @@ image:
   repository: hugging-face
   name: nvidia-meta-llama-meta-llama-3.1-8b-instruct
   pullPolicy: Always
-  tag: latest
+  tag: 0.1.0
 
 serviceAccountName: hugs-service-account
 

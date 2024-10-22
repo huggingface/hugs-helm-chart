@@ -170,6 +170,7 @@ helm install $DEPLOYMENT_NAME hugs/hugs \
     --set image.registry="XXXXXXXXXXXX.dkr.ecr.us-east-1.amazonaws.com" \
     --set image.repository="hugging-face" \
     --set image.name="nvidia-meta-llama-meta-llama-3.1-8b-instruct" \
+    --set image.tag="0.1.0" \
     --set serviceAccountName=$SERVICE_ACCOUNT_NAME \
     --set nodeSelector."eks\.amazonaws\.com/nodegroup"=$NODE_GROUP_NAME
 ```

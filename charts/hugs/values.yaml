@@ -5,7 +5,7 @@ image:
   repository: # Add the HUGS Repository where the container is hosted in
   name: # Add the name of the HUGS container image
   pullPolicy: Always
-  tag: latest
+  tag: 0.1.0
 
 # serviceAccountName: hugs-service-account
 
