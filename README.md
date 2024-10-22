@@ -6,7 +6,7 @@
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
-> ![WARNING]
+> [!WARNING]
 > HUGS Helm Chart is subject to changes before the 0.1.0 release!
 
 ## Installing the Chart
