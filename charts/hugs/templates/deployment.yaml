@@ -32,10 +32,6 @@ spec:
       tolerations:
         {{- if .Values.tolerations }}
           {{- toYaml .Values.tolerations | nindent 8 }}
-        {{- else }}
-          - key: nvidia.com/gpu
-            operator: Exists
-            effect: NoSchedule
         {{- end }}
       containers:
         - name: {{ .Chart.Name }}
