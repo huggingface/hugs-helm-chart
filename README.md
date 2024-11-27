@@ -18,12 +18,12 @@ $ helm repo add hugs https://raw.githubusercontent.com/huggingface/hugs-helm-cha
 $ helm repo update hugs
 ```
 
-Then to install the chart on an arbitraty cluster you can run the following:
+Then to install the chart on a Kubernetes cluster you can run the following:
 
 ```console
 $ helm install hugs-demo hugs/hugs \
     --set image.repository="hfhugs" \
     --set image.name="nvidia-meta-llama-meta-llama-3.1-8b-instruct" \
-    --set resources.requests.nvidia.com/gpu=1 \
-    --set resources.limits.nvidia.com/gpu=1
+	--set resources.requests.nvidia\\.com/gpu=1 \
+	--set resources.limits.nvidia\\.com/gpu=1
 ```
