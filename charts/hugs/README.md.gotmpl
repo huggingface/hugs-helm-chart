@@ -15,19 +15,14 @@ $ helm repo add hugs https://raw.githubusercontent.com/huggingface/hugs-helm-cha
 $ helm repo update hugs
 ```
 
-## Installing the Chart
-
-Then to install the chart on e.g. AWS EKS you can run the following:
+Then to install the chart on an arbitraty cluster you can run the following:
 
 ```console
 $ helm install hugs-demo hugs/{{ template "chart.name" . }} \
-    -f aws/eks-values.yaml \
-    --set image.registry="XXXXXXXXXXXX.dkr.ecr.us-east-1.amazonaws.com" \
-    --set image.repository="hugging-face" \
-    --set image.model="nvidia-meta-llama-meta-llama-3.1-8b-instruct"
+    --set image.repository="hfhugs" \
+    --set image.name="nvidia-meta-llama-meta-llama-3.1-8b-instruct" \
+    --set resources.requests.nvidia.com/gpu=1 \
+    --set resources.limits.nvidia.com/gpu=1
 ```
-
-> [!NOTE]
-> Find more information about HUGS on AWS [here](./aws/).
 
 {{ template "helm-docs.versionFooter" . }}
