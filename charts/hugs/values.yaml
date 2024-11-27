@@ -1,11 +1,9 @@
-# numReplicas: 1
-
 image:
   registry: # Add the HUGS Registry that you subscribed to
   repository: # Add the HUGS Repository where the container is hosted in
   name: # Add the name of the HUGS container image
   pullPolicy: Always
-  tag: 0.1.0
+  tag: latest
 
 # serviceAccountName: hugs-service-account
 
@@ -66,10 +64,7 @@ ingress:
   #         pathType: Prefix
 
 resources:
-  requests:
-    nvidia.com/gpu: 1
-  limits:
-    nvidia.com/gpu: 1
+  {}
 
 volumes:
   - name: dshm
