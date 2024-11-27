@@ -2,7 +2,7 @@
 
 <img src="https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/hugs/hugs-purple-no-bg.png" width="200" alt="HUGS Logo">
 
-![Version: 0.0.3](https://img.shields.io/badge/Version-0.0.3-informational?style=flat-square)
+![Version: 0.0.4](https://img.shields.io/badge/Version-0.0.4-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
@@ -18,18 +18,12 @@ $ helm repo add hugs https://raw.githubusercontent.com/huggingface/hugs-helm-cha
 $ helm repo update hugs
 ```
 
-## Installing the Chart
-
-Then to install the chart on e.g. AWS EKS you can run the following:
+Then to install the chart on a Kubernetes cluster you can run the following:
 
 ```console
 $ helm install hugs-demo hugs/hugs \
-    -f aws/eks-values.yaml \
-    --set image.registry="XXXXXXXXXXXX.dkr.ecr.us-east-1.amazonaws.com" \
-    --set image.repository="hugging-face" \
+    --set image.repository="hfhugs" \
     --set image.name="nvidia-meta-llama-meta-llama-3.1-8b-instruct" \
-    --set image.tag="0.1.0"
+	--set resources.requests.nvidia\\.com/gpu=1 \
+	--set resources.limits.nvidia\\.com/gpu=1
 ```
-
-> [!NOTE]
-> Find more information about HUGS on AWS [here](./aws/).
