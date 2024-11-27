@@ -30,9 +30,9 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       {{- end }}
       tolerations:
-        - key: nvidia.com/gpu
-          operator: Exists
-          effect: NoSchedule
+        {{- if .Values.tolerations }}
+          {{- toYaml .Values.tolerations | nindent 8 }}
+        {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           {{- if .Values.securityContext }}

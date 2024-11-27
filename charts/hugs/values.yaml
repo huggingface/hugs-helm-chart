@@ -85,6 +85,10 @@ nodeSelector:
   {}
   # eks.amazonaws.com/nodegroup: hugs-node-group
 
+# https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+tolerations:
+  {}
+
 autoscaling:
   enabled: false
   # minReplicas: 1
